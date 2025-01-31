@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block style %}
+    <style>
+        .project-details {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .card-header {
+            background-color: #343a40;
+            color: white;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-footer {
+            margin-top: 20px;
+        }
+
+        .btn {
+            margin: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-end me-4">
+        <a href="{{ path('app_projet_affecter', {'id': projet.id })}}" class="text-decoration-none">
+            <i class="fs-1 bi bi-person-add text-primary"></i>
+        </a>
+    </div>
+
+    <div class="project-details">
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ projet.nom }}</h2>
+            </div>
+            <div class="card-body">
+                <p><strong>Description :</strong> {{ projet.description }}</p>
+                <p><strong>Statut :</strong> {{ projet.statut.label }}</p>
+                <p><strong>Date limite :</strong> {{ projet.dateLimite ? projet.dateLimite|date('Y-m-d') : 'Non définie' }}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{{ path('app_projet_edit', {'id': projet.id}) }}" class="btn btn-warning">Modifier</a>
+                <a href="{{ path('app_projet_index') }}" class="btn btn-secondary">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

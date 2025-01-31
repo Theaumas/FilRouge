@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification du Profil{% endblock %}
+
+{% block body %}
+
+<div class="container mt-4">
+ 
+    <a href="{{ path('app_user_show', {'id': app.user.id}) }}" class="btn btn-outline-dark mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512">
+            <path fill="#000000" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+        </svg>
+        Retour
+    </a>
+
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h1>Modifier mon Profil</h1>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-3 text-center">
+            <img class="img-fluid img-thumbnail rounded shadow-sm w-75" 
+                src="{{ app.user.photo is not empty ? asset(app.user.photo) : asset('assets/images/default-avatar.jpg') }}" 
+                alt="Photo de profil">
+        </div>
+
+
+        <div class="col-md-9">
+            <div class="card shadow-sm p-4">
+                {{ include('user/formUser.html.twig', {'button_label': 'Mettre à Jour'}) }}
+                <div class="text-end">
+                    {{ include('user/deleteUser.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

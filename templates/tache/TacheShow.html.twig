@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block style %}
+    <style>
+        .card {
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .task-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .card-body {
+            padding: 15px;
+        }
+        .list-group-item {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}Tâches du projet {{ projet.nom }}{% endblock %}
+
+{% block body %}
+
+    <a href="{{ path('app_projet_index', {'projet': projet.id}) }}" class="btn btn-outline-dark mb-3 mt-2 ms-3">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512">
+            <path fill="#000000" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+        </svg>Retour
+    </a>
+<div class="container mt-4">
+    <h1>Tâches du projet "{{ projet.nom }}"</h1>
+
+    {% if taches|length > 0 %}
+        <div class="row mt-4">
+            {% for tache in taches %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-dark text-white">
+                            <h5>{{ tache.titre }}</h5>
+                            <span class="badge bg-{{ tache.statut == 'Terminé' ? 'success' : 'warning' }} text-white">{{ tache.statut }}</span>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Description :</strong> {{ tache.description }}</p>
+
+                            {% if tache.user %}
+                                <p><strong>Attribuée à :</strong> {{ tache.user.nom }} {{ tache.user.prenom }}</p>
+                            {% else %}
+                                <p><strong>Pas d'utilisateur attribué</strong></p>
+                            {% endif %}
+
+                            <div class="task-actions">
+                                <a href="{{ path('app_tache_edit', {'projet': projet.id, 'id': tache.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                <form method="post" action="{{ path('app_tache_delete', {'projet': projet.id, 'id': tache.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tache.id) }}">
+                                    <button class="btn btn-danger btn-sm">Supprimer</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucune tâche disponible pour ce projet.</p>
+    {% endif %}
+
+    <a href="{{ path('app_tache_new', {'projet': projet.id}) }}" class="btn btn-success mt-4">Ajouter une tâche</a>
+</div>
+{% endblock %}

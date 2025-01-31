@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Adresse{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+
+    <a href="{{ path('app_addresse_index') }}" class="btn btn-outline-dark mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512">
+            <path fill="#000000" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+        </svg>
+        Retour
+    </a>
+
+    <h1 class="text-center mb-4">Entrer une nouvelle adresse</h1>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm p-4">
+                {{ include('addresse/Addresseform.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

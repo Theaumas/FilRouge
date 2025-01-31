@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-center mb-4">
+       <h1>Profil utilisateur</h1>
+    </div>
+
+    <div class="row d-flex justify-content-center align-items-center" style="min-height: 60vh;">
+        <div class="col-md-4 d-flex flex-column align-items-center">
+            <a href="{{ path('app_user_show', {'id': app.user.id}) }}">
+                <img class="img-fluid img-thumbnail rounded shadow-sm w-75" 
+                     src="{{ app.user.photo is not empty ? asset(app.user.photo) : asset('assets/images/default-avatar.jpg') }}" 
+                     alt="Photo de profil">
+            </a>
+            <h3 class="mt-3 me-2">Profil de : {{ app.user.nom }} {{ app.user.Prenom }}</h3>
+        </div>
+        
+        <div class="col-md-4 d-flex flex-column align-items-center">
+            <a href="{{ path('app_addresse_index')}} ">
+                <img class="img-fluid img-thumbnail rounded border border-dark shadow-sm w-75" 
+                     src="{{ asset('assets/images/adresse_default.jpg') }}" 
+                     alt="Photo d'Adresse">
+            </a>
+            <h3 class="mt-3"> Adresse(s) de : {{ app.user.nom }} {{ app.user.Prenom }}</h3>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

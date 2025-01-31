@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Adresse{% endblock %}
+
+{% block body %}
+<a href="{{ path('app_addresse_index') }}" class="btn btn-outline-dark mb-3 mt-2 ms-3">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512">
+            <path fill="#000000" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+        </svg>Retour
+    </a>
+
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Adresse du Compte</h1>
+    
+    <h2 class="text-center mb-4">Mes Adresses</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Titre</th>
+                    <th>adresse</th>
+                    <th>Ville</th>
+                    <th>Code Postal</th>
+                    <th>Pays</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for addresse in app.user.addresses %}
+                    <tr>
+                        <td>{{ addresse.titre }}</td>
+                        <td>{{ addresse.adresse }}</td>
+                        <td>{{ addresse.Ville }}</td>
+                        <td>{{ addresse.CodePostal }}</td>
+                        <td>{{ addresse.Pays }}</td>
+                        <td>
+                            <a href="{{ path('app_addresse_edit', {'id': addresse.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                            <form method="post" action="{{ path('app_addresse_delete', {'id': addresse.id}) }}" class="d-inline" onsubmit="return confirm('Êtes-vous sûr ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ addresse.id) }}"/>
+                                <button class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">Aucune adresse disponible.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_addresse_new') }}" class="btn btn-success">Ajouter une adresse</a>
+    </div>
+</div>
+{% endblock %}
