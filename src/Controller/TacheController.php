@@ -27,7 +27,7 @@ class TacheController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/{projet}', name: 'app_tache_index', requirements: ['projet' => '\d+'], methods: ['GET'])]
+    #[Route('/{projet}', name: 'app_tache_index', methods: ['GET'])]
     public function index(Projets $projet): Response
     {
         return $this->render('tache/TacheIndex.html.twig', [
@@ -39,7 +39,7 @@ class TacheController extends AbstractController
     #[Route('/{projet}/new', name: 'app_tache_new', requirements: ['projet' => '\d+'], methods: ['GET', 'POST'])]
     public function new(Request $request, Projets $projet): Response
     {
-        $user = $this->getUser();
+        $users = $this->getUser();
         $tache = new Tache();
         $form = $this->createForm(TacheType::class, $tache);
         $form->handleRequest($request);
