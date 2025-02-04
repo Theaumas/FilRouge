@@ -34,7 +34,7 @@
                 <p><strong>Description :</strong> {{ projet.description }}</p>
                 <a href="{{ path('app_projet_show', {'id': projet.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-info-square"></i></a>
                 <a href="{{ path('app_tache_new', {'projet': projet.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-patch-plus"></i></a>
-                <a href="{{ path('app_tache_show', {'projet': projet.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-list-task"></i></a>
+                <a href="{{ path('app_tache_index', {'projet': projet.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-list-task"></i></a>
                 <p><strong>Membres :</strong></p>
                 {% if projet.Membres is not empty %}
                     <ul class="list-unstyled">

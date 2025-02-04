@@ -153,7 +153,7 @@ class ProjetController extends AbstractController
 
         return $this->render('projet/affecterProjet.html.twig', [
             'projet' => $projet,
-            'users' => $userRepository->findAll(), 
+            'Membres' => $userRepository->findAll(), 
             'f' => $form->createView(),
         ]);
     }   

@@ -4,71 +4,72 @@
     <style>
         .card {
             transition: all 0.3s;
-            cursor: pointer;
+            min-height: 200px; /* Assure une hauteur uniforme */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .card:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .task-actions {
             display: flex;
+            gap: 5px;
             justify-content: flex-end;
+        }
+        .user-actions {
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
-        }
-        .card-body {
-            padding: 15px;
-        }
-        .list-group-item {
-            display: none;
         }
     </style>
 {% endblock %}
 
-{% block title %}Tâches du projet {{ projet.nom }}{% endblock %}
+{% block title %}Tâche {{ tache.titre }}{% endblock %}
 
 {% block body %}
+    <div class="d-flex justify-content-end me-4">
+        <a href="{{ path('app_tache_affecter', {'projetId': projet.id, 'tacheId': tache.id}) }}" class="text-decoration-none">
+            <i class="fs-1 bi bi-person-add text-primary"></i>
+        </a>
+    </div>
 
-    <a href="{{ path('app_projet_index', {'projet': projet.id}) }}" class="btn btn-outline-dark mb-3 mt-2 ms-3">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512">
-            <path fill="#000000" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
-        </svg>Retour
-    </a>
-<div class="container mt-4">
-    <h1>Tâches du projet "{{ projet.nom }}"</h1>
+    <div class="container mt-4">
+        <a href="{{ path('app_tache_index', {'projet': projet.id}) }}" class="btn btn-outline-dark mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512">
+                <path fill="#000000" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+            </svg>
+            Retour aux Tâches
+        </a>
 
-    {% if taches|length > 0 %}
-        <div class="row mt-4">
-            {% for tache in taches %}
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-dark text-white">
-                            <h5>{{ tache.titre }}</h5>
-                            <span class="badge bg-{{ tache.statut == 'Terminé' ? 'success' : 'warning' }} text-white">{{ tache.statut }}</span>
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5>{{ tache.titre }}</h5>
+                <span class="badge bg-{{ tache.statut == 'Terminé' ? 'success' : 'warning' }} text-white">{{ tache.statut }}</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Description :</strong> {{ tache.description }}</p>
+                <p><strong>Statut :</strong> {{ tache.statut }}</p>
+                <p><strong>Attribuée à :</strong> 
+                    {% if tache.getUsers() is not empty %}
+                        <div class="user-actions">
+                            {% for user in tache.getUsers() %}
+                                <div class="d-flex align-items-center mb-2">
+                                    <span>{{ user.prenom }} {{ user.nom }}</span>
+                                    {% if user != app.user %}
+                                        <form action="{{ path('app_tache_remove_membre', {'tacheId': tache.id, 'userId': user.id, 'projetId': projet.id}) }}" method="POST" style="display:inline;">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('remove_member' ~ tache.id ~ user.id) }}">
+                                            <button type="submit" class="btn btn-danger btn-sm ms-2"><i class="bi bi-person-dash"></i> Supprimer</button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
                         </div>
-                        <div class="card-body">
-                            <p><strong>Description :</strong> {{ tache.description }}</p>
-
-                            <p>Assignée à :
-                                {% for user in tache.users %}
-                                    {{ user.prenom }} {{ user.nom }}{% if not loop.last %}, {% endif %}
-                                {% endfor %}
-                            </p>
-                            <div class="task-actions">
-                                <a href="{{ path('app_tache_edit', {'projet': projet.id, 'id': tache.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                <form method="post" action="{{ path('app_tache_delete', {'projet': projet.id, 'id': tache.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tache.id) }}">
-                                    <button class="btn btn-danger btn-sm">Supprimer</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
+                    {% else %}
+                        <span>Aucun utilisateur assigné</span>
+                    {% endif %}
+                </p>
+            </div>
         </div>
-    {% else %}
-        <p>Aucune tâche disponible pour ce projet.</p>
-    {% endif %}
-
-    <a href="{{ path('app_tache_new', {'projet': projet.id}) }}" class="btn btn-success mt-4">Ajouter une tâche</a>
-</div>
+    </div>
 {% endblock %}

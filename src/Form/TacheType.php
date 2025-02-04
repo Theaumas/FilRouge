@@ -27,15 +27,7 @@ class TacheType extends AbstractType
                     'Terminé' => 'termine',
                     'A venir' => 'a_venir',
                 ],
-            ])
-            ->add('users', EntityType::class, [
-            'class' => User::class,
-            'choice_label' => function(User $user) {
-                return $user->getPrenom() . ' ' . $user->getNom();
-            },
-            'multiple' => true,
-            'expanded' => true, 
-        ]);
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

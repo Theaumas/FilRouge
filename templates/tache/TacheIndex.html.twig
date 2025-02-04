@@ -45,18 +45,28 @@
                         <h5 class="mb-0">{{ tache.titre }}</h5>
                     </div>
                     <div class="card-body">
+                        <p><strong>Description :</strong> {{ tache.description }}</p>
                         <p><strong>Statut :</strong> {{ tache.statut }}</p>
+                        <p><strong>Attribuée à :</strong> 
                         {% if tache.users is not empty %}
-                            <p><strong>Attribuée à :</strong> 
+                            <ul class="list-unstyled">
                                 {% for user in tache.users %}
-                                    {{ user.nom }} {{ user.prenom }}{% if not loop.last %}, {% endif %}
+                                <li class="mb-3">
+                                    {{ user.nom }} {{ user.prenom }}
+                                    <form method="post" action="{{ path('app_tache_remove_membre', {'projetId': projet.id, 'tacheId': tache.id, 'userId': user.id}) }}" class="d-inline ms-2" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur de cette tâche ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('remove_user' ~ tache.id ~ user.id) }}"/>
+                                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                    {% if not loop.last %}, {% endif %}
+                                </li>
                                 {% endfor %}
-                            </p>
+                            </ul>
                         {% else %}
                             <p><strong>Attribuée à :</strong> Aucun utilisateur</p>
                         {% endif %}
                     </div>
                     <div class="card-footer bg-light d-flex justify-content-end">
+                        <a href="{{ path('app_tache_show', {'projet': projet.id, 'id': tache.id}) }}" class="btn btn-primary btn-sm me-2"><i class="bi bi-info-square"></i></a>
                         <a href="{{ path('app_tache_edit', {'projet': projet.id, 'id': tache.id}) }}" class="btn btn-warning btn-sm">
                             Modifier
                         </a>
@@ -70,10 +80,6 @@
         {% else %}
             <p class="text-center">Aucune tâche trouvée.</p>
         {% endfor %}
-    </div>
-
-    <div class="d-flex justify-content-center">
-        <a href="{{ path('app_projet_index') }}" class="btn btn-secondary mt-4">Retour aux projets</a>
     </div>
 </div>
 {% endblock %}

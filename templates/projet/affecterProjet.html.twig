@@ -22,22 +22,29 @@
         <div class="col-md-9">
             <h2 class="mb-3">Employés</h2>
             <div class="row row-cols-1 row-cols-md-3 g-4">
-                {% for user in users %}
-                    <div class="col">
-                        <div class="card h-100 shadow-sm text-center">
-                            <img src="{{ user.photo is not empty ? asset(user.photo) : asset('assets/images/default-avatar.jpg') }}" 
-                                 class="card-img-top rounded-circle mx-auto mt-3"
-                                 alt="Photo de {{ user.Prenom }}"
-                                 style="width: 100px; height: 100px; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ user.matricule }}</h5>
-                                <p class="card-text">{{ user.Prenom }}</p>
-                                <a href="{{ path('app_projet_choisir', {'projetId': projet.id, 'userId': user.id}) }}" class="btn btn-outline-info">
-                                    Choisir
-                                </a>
+                {% for user in Membres %}
+                    {% if user not in projet.Membres %}
+                        <div class="col">
+                            <div class="card h-100 shadow-sm text-center">
+                                <img src="{{ user.photo is not empty ? asset(user.photo) : asset('assets/images/default-avatar.jpg') }}" 
+                                     class="card-img-top rounded-circle mx-auto mt-3"
+                                     alt="Photo de {{ user.Prenom }}"
+                                     style="width: 100px; height: 100px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ user.matricule }}</h5>
+                                    <p class="card-text">{{ user.Prenom }}</p>
+                                    
+                                    {% if user in projet.Membres %}
+                                        <button class="btn btn-secondary" disabled>Déjà choisi</button>
+                                    {% else %}
+                                        <a href="{{ path('app_projet_choisir', {'projetId': projet.id, 'userId': user.id}) }}" class="btn btn-outline-info">
+                                            Choisir
+                                        </a>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
