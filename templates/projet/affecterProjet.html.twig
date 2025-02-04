@@ -20,7 +20,7 @@
         </div>
 
         <div class="col-md-9">
-            <h4 class="mb-3">Employés</h4>
+            <h2 class="mb-3">Employés</h2>
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 {% for user in users %}
                     <div class="col">
@@ -32,7 +32,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ user.matricule }}</h5>
                                 <p class="card-text">{{ user.Prenom }}</p>
-                                <a href="{{ path('app_add_team', {'id': user.id}) }}" class="btn btn-outline-info">
+                                <a href="{{ path('app_projet_choisir', {'projetId': projet.id, 'userId': user.id}) }}" class="btn btn-outline-info">
                                     Choisir
                                 </a>
                             </div>

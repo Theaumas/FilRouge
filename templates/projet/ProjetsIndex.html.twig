@@ -16,39 +16,48 @@
 {% block body %}
 <a href="{{ path('app_projet_new') }}" class="btn btn-success mt-4 ms-4">Créer un nouveau projet</a>
 <div class="container mt-4">
-    <h1 class="mb-4">Liste des projets</h1>
+    <h1 class="mb-4 text-center">Liste des projets</h1>
     <div class="row">
-        {% for projet in app.user.projets %}
-            <div class="col-md-4 mb-4"> 
-                <div class="card shadow-sm">
-                    <div class="card-header bg-dark text-white">
-                        <h5>{{ projet.nom }}</h5>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Description :</strong> {{ projet.description }}</p>
-                        <a href="{{ path('app_projet_show', {'id': projet.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-info-square"></i></a>
-                        <a href="{{ path('app_tache_new', {'projet': projet.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-patch-plus"></i></a>
-                        <a href="{{ path('app_tache_show', {'projet': projet.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-list-task"></i></a>
-                        <p><strong>Membres :</strong></p>
-                        {% if projet.Membres is not empty %}
-                            <ul class="list-unstyled">
-                                {% for membre in projet.Membres %}
-                                    <li>{{ membre.prenom }} {{ membre.nom }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p>Aucun membre</p>
-                        {% endif %}
-                    </div>
-                    <form action="{{ path('app_projet_delete', {'id': projet.id}) }}" method="POST" style="display:inline;">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ projet.id) }}">
+      {% for projet in app.user.projets %}
+    <div class="col-md-4 mb-4"> 
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h5>{{ projet.nom }}</h5>
+                <form action="{{ path('app_projet_delete', {'id': projet.id}) }}" method="POST" style="display:inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ projet.id) }}">
+                    {% if projet.creator != app.user %}
                         <button type="submit" class="btn btn-danger btn-sm mb-2 ms-2"><i class="bi bi-trash"></i></button>
-                    </form>
-                </div>
+                    {% endif %}
+                </form>
             </div>
-        {% else %}
-            <p>Aucun projet disponible.</p>
-        {% endfor %}
+            <div class="card-body">
+                <p><strong>Description :</strong> {{ projet.description }}</p>
+                <a href="{{ path('app_projet_show', {'id': projet.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-info-square"></i></a>
+                <a href="{{ path('app_tache_new', {'projet': projet.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-patch-plus"></i></a>
+                <a href="{{ path('app_tache_show', {'projet': projet.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-list-task"></i></a>
+                <p><strong>Membres :</strong></p>
+                {% if projet.Membres is not empty %}
+                    <ul class="list-unstyled">
+                        {% for membre in projet.Membres %}
+                            <li>
+                                {{ membre.prenom }} {{ membre.nom }}
+                                {% if membre != app.user %}
+                                    <form action="{{ path('app_projet_remove_member', {'projetId': projet.id, 'userId': membre.id}) }}" method="POST" style="display:inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('remove_member' ~ projet.id ~ membre.id) }}">
+                                        <button type="submit" class="btn btn-danger btn-sm ms-2"><i class="bi bi-person-dash"></i> Supprimer</button>
+                                    </form>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Aucun membre</p>
+                {% endif %}
+                {# <p><strong>Nombre de tâches :</strong> {{ tasksCount(projet) }}</p> #}
+            </div>
+        </div>
     </div>
-</div>
+    {% else %}
+        <p>Aucun projet disponible.</p>
+    {% endfor %}
 {% endblock %}

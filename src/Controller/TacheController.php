@@ -101,7 +101,7 @@ class TacheController extends AbstractController
             $this->addFlash('success', 'Tâche supprimée avec succès.');
         }
 
-        return $this->redirectToRoute('app_tache_show', ['projet' => $projet->getId(), 'id' => $tache->getId()]);
+        return $this->redirectToRoute('app_tache_index', ['projet' => $projet->getId()]);
 
     }
 }

@@ -52,8 +52,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Addresse::class, mappedBy: 'user')]
     private Collection $addresses;
 
-    // #[ORM\OneToMany(targetEntity: Tache::class, mappedBy:'user')]
-    // private ?Tache $tache = null;
+    #[ORM\ManyToMany(targetEntity: Tache::class, mappedBy: "users")]
+    private Collection $taches;
 
    /**
      * @var list<string> The user roles
@@ -69,6 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->addresses = new ArrayCollection();
         $this->projets = new ArrayCollection();
+        $this->taches = new ArrayCollection();
     }
 
     public function __toString()
@@ -207,18 +208,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    // public function getTache(): ?string
-    // {
-    //     return $this->tache;
-    // }
+    public function getTaches(): Collection
+    {
+        return $this->taches;
+    }
 
-    // public function setTache(string $tache): static
-    // {
-    //     $this->tache = $tache;
+    public function addTache(Tache $tache): static
+    {
+        if (!$this->taches->contains($tache)) {
+            $this->taches->add($tache);
+            $tache->addUser($this);
+        }
+        return $this;
+    }
 
-    //     return $this;
-    // }
-
+    public function removeTache(Tache $tache): static
+    {
+        if ($this->taches->removeElement($tache)) {
+            $tache->removeUser($this);
+        }
+        return $this;
+    }
     /**
      * @return Collection<int, Addresse>
      */
@@ -241,10 +251,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->projets->add($projet);
             $projet->addMembre($this);
         }
-
         return $this;
     }
 
+
+    public function removeProjet(Projets $projet): self
+    {
+        $this->projets->removeElement($projet);
+
+        return $this;
+    }
 
     public function addAddress(Addresse $address): static
     {

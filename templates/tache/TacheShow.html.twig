@@ -48,12 +48,11 @@
                         <div class="card-body">
                             <p><strong>Description :</strong> {{ tache.description }}</p>
 
-                            {% if tache.user %}
-                                <p><strong>Attribuée à :</strong> {{ tache.user.nom }} {{ tache.user.prenom }}</p>
-                            {% else %}
-                                <p><strong>Pas d'utilisateur attribué</strong></p>
-                            {% endif %}
-
+                            <p>Assignée à :
+                                {% for user in tache.users %}
+                                    {{ user.prenom }} {{ user.nom }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </p>
                             <div class="task-actions">
                                 <a href="{{ path('app_tache_edit', {'projet': projet.id, 'id': tache.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
                                 <form method="post" action="{{ path('app_tache_delete', {'projet': projet.id, 'id': tache.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');">

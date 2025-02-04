@@ -40,11 +40,20 @@ class Projets
     #[ORM\OneToMany(mappedBy: "projet", targetEntity: Tache::class, cascade: ["persist", "remove"])]
     private Collection $taches;
 
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable:false)]
+    private $creator;
+
     public function __construct()
     {
         $this->Membres = new ArrayCollection();
         $this->DateCreation = new \DateTime();
         $this->taches = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->Nom;
     }
 
     public function getId(): ?int
@@ -103,8 +112,10 @@ class Projets
     {
         if (!$this->Membres->contains($user)) {
             $this->Membres[] = $user;
+    
+            $user->addProjet($this); 
         }
-
+    
         return $this;
     }
 
@@ -115,8 +126,10 @@ class Projets
 
     public function removeMembre(User $user): self
     {
-        $this->Membres->removeElement($user);
-
+        if ($this->Membres->removeElement($user)) {
+            $user->removeProjet($this); 
+        }
+    
         return $this;
     }
 
@@ -153,6 +166,18 @@ class Projets
                 $tache->setProjet(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): self
+    {
+        $this->creator = $creator;
 
         return $this;
     }

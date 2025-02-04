@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Tache;
+use App\Entity\Projets;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,27 @@ class TacheRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Tache::class);
+    }
+
+    public function countByProjet(Projets $projet)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('COUNT(t)')
+            ->where('t.projet = :projet')
+            ->setParameter('projet', $projet)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+        
+
+    public function countTasksForProject(Projets $projet): int
+    {
+        return $this->createQueryBuilder('t')
+            ->select('COUNT(t.id)')
+            ->where('t.projet = :projet')
+            ->setParameter('projet', $projet)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
 //    /**

@@ -20,7 +20,7 @@ class SearchType extends AbstractType
                 'label' => false,
                 'required' => false,
                 'attr' => [
-                    'placeholder' =>'Votre message de recherche',
+                    'placeholder' =>'Votre Recherche',
                     'class' => 'form-control-sm'
                 ]
             ])
