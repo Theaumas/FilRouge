@@ -56,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $taches;
 
    /**
-     * @var list<string> The user roles
+     * @var list<string> 
      */
     #[ORM\Column]
     private array $roles = [];

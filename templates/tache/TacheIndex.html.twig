@@ -48,22 +48,23 @@
                         <p><strong>Description :</strong> {{ tache.description }}</p>
                         <p><strong>Statut :</strong> {{ tache.statut }}</p>
                         <p><strong>Attribuée à :</strong> 
-                        {% if tache.users is not empty %}
-                            <ul class="list-unstyled">
-                                {% for user in tache.users %}
-                                <li class="mb-3">
-                                    {{ user.nom }} {{ user.prenom }}
-                                    <form method="post" action="{{ path('app_tache_remove_membre', {'projetId': projet.id, 'tacheId': tache.id, 'userId': user.id}) }}" class="d-inline ms-2" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur de cette tâche ?');">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('remove_user' ~ tache.id ~ user.id) }}"/>
-                                        <button class="btn btn-danger btn-sm">Supprimer</button>
-                                    </form>
-                                    {% if not loop.last %}, {% endif %}
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p><strong>Attribuée à :</strong> Aucun utilisateur</p>
-                        {% endif %}
+                         {% if tache.getUsers() is not empty %}
+                        <div class="user-actions">
+                            {% for user in tache.getUsers() %}
+                                <div class="d-flex align-items-center mb-2">
+                                    <span>{{ user.prenom }} {{ user.nom }}</span>
+                                    {% if user != app.user %}
+                                        <form action="{{ path('app_tache_remove_membre', {'tacheId': tache.id, 'userId': user.id, 'projetId': projet.id}) }}" method="POST" style="display:inline;">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('remove_member' ~ tache.id ~ user.id) }}">
+                                            <button type="submit" class="btn btn-danger btn-sm ms-2"><i class="bi bi-person-dash"></i> Supprimer</button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <span>Aucun utilisateur assigné</span>
+                    {% endif %}
                     </div>
                     <div class="card-footer bg-light d-flex justify-content-end">
                         <a href="{{ path('app_tache_show', {'projet': projet.id, 'id': tache.id}) }}" class="btn btn-primary btn-sm me-2"><i class="bi bi-info-square"></i></a>
