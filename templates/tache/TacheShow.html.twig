@@ -47,29 +47,31 @@
                 <h5>{{ tache.titre }}</h5>
                 <span class="badge bg-{{ tache.statut == 'Terminé' ? 'success' : 'warning' }} text-white">{{ tache.statut }}</span>
             </div>
-            <div class="card-body">
+           <div class="card-body">
                 <p><strong>Description :</strong> {{ tache.description }}</p>
                 <p><strong>Statut :</strong> {{ tache.statut }}</p>
-                <p><strong>Attribuée à :</strong> 
-                    {% if tache.getUsers() is not empty %}
-                        <div class="user-actions">
+                <p><strong>Attribuée à :</strong></p>
+                {% if tache.getUsers() is not empty %}
+                    <div class="user-actions">
+                        <ul class="list-group">
                             {% for user in tache.getUsers() %}
-                                <div class="d-flex align-items-center mb-2">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span>{{ user.prenom }} {{ user.nom }}</span>
                                     {% if user != app.user %}
-                                        <form action="{{ path('app_tache_remove_membre', {'tacheId': tache.id, 'userId': user.id, 'projetId': projet.id}) }}" method="POST" style="display:inline;">
+                                        <form action="{{ path('app_tache_remove_membre', {'tacheId': tache.id, 'userId': user.id, 'projetId': projet.id}) }}" method="POST">
                                             <input type="hidden" name="_token" value="{{ csrf_token('remove_member' ~ tache.id ~ user.id) }}">
                                             <button type="submit" class="btn btn-danger btn-sm ms-2"><i class="bi bi-person-dash"></i> Supprimer</button>
                                         </form>
                                     {% endif %}
-                                </div>
+                                </li>
                             {% endfor %}
-                        </div>
-                    {% else %}
-                        <span>Aucun utilisateur assigné</span>
-                    {% endif %}
-                </p>
+                        </ul>
+                    </div>
+                {% else %}
+                    <p><span>Aucun utilisateur assigné</span></p>
+                {% endif %}
             </div>
+
         </div>
     </div>
 {% endblock %}

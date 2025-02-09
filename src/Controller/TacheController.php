@@ -36,7 +36,8 @@ class TacheController extends AbstractController
         ]);
     }
 
-    #[Route('/{projet}/new', name: 'app_tache_new', requirements: ['projet' => '\d+'], methods: ['GET', 'POST'])]
+
+    #[Route('/{projet}/new', name: 'app_tache_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Projets $projet): Response
     {
         $users = $this->getUser();

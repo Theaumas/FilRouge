@@ -8,15 +8,12 @@
             max-width: 600px;
             width: 100%;
             padding: 20px;
+            margin-top : 10px
         }
-
+        
         .form-container .card {
             border: 1px solid #ddd;
             border-radius: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
         }
 
         .form-control {
@@ -27,12 +24,7 @@
         .btn-primary {
             padding: 10px;
             font-size: 16px;
-        }
-
-        @media (max-width: 768px) {
-            .row .col-md-6 {
-                width: 100%;
-            }
+            margin-top : 10px
         }
     </style>
 {% endblock %}
@@ -40,57 +32,66 @@
 {% block body %}
 <div class="container d-flex justify-content-center align-items-center">
     <div class="form-container">
-        <div class="card p-4 shadow-sm">
+        <div class="card p-4 ">
             <h1 class="h4 mb-4 text-center">Inscription</h1>
             
             {{ form_start(form) }}
-            
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    {{ form_row(form.email) }}
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.email) }}
+                        {{ form_widget(form.email) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.matricule) }}
+                        {{ form_widget(form.matricule) }}
+                    </div>
                 </div>
-                <div class="col-md-6 form-group">
-                    {{ form_row(form.matricule) }}
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    {{ form_row(form.Prenom) }}
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.Prenom) }}
+                        {{ form_widget(form.Prenom) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.Nom) }}
+                        {{ form_widget(form.Nom) }}
+                    </div>
                 </div>
-                <div class="col-md-6 form-group">
-                    {{ form_row(form.Nom) }}
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    {{ form_row(form.Tel) }}
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.Tel) }}
+                        {{ form_widget(form.Tel) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.service) }}
+                        {{ form_widget(form.service) }}
+                    </div>
                 </div>
-                <div class="col-md-6 form-group">
-                    {{ form_row(form.service) }}
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    {{ form_row(form.photo) }}
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.photo) }}
+                        {{ form_widget(form.photo) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.DateDeNaissance) }}
+                        {{ form_widget(form.DateDeNaissance) }}
+                    </div>
                 </div>
-                <div class="col-md-6 form-group">
-                    {{ form_row(form.DateDeNaissance) }}
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    {{ form_row(form.password.first) }}
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.password.first) }}
+                        {{ form_widget(form.password.first) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.password.second) }}
+                        {{ form_widget(form.password.second) }}
+                    </div>
                 </div>
-                <div class="col-md-6 form-group">
-                    {{ form_row(form.password.second) }}
-                </div>
-            </div>
 
-            <button class="btn btn-primary w-100" type="submit">S'inscrire</button>
+                <button class="btn btn-primary w-100" type="submit">S'inscrire</button>
 
             {{ form_end(form) }}
 
