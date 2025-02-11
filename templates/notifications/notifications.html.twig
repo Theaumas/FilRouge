@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Mes Notifications {% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h2 class="mb-4">Mes notifications</h2>
+        <div class="card">
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for notification in notifications %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center {% if not notification.isRead %}bg-light {% endif %}">
+                            <span class="fw-bold {% if not notification.isRead %}text-primary{% endif %}">{{ notification.message }}</span>
+                            {% if not notification.isRead %}
+                                <a href="{{ path('app_notification_lu', {'id': notification.id}) }}" class="btn btn-sm btn-outline-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="18" viewBox="0 0 448 512">
+                                        <path fill="#B197FC" d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM337 209L209 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L303 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/>
+                                    </svg>
+                                </a>
+                            {% endif %}
+                        </li>
+                    {% else %}
+                        <li class="list-group-item text-muted">Aucune notification</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

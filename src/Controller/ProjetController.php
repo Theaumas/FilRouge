@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classes\Search;
+use App\Classes\NotificationSystem;
 use App\Entity\Projets;
 use App\Form\ProjetType;
 use App\Form\SearchType;
@@ -20,6 +21,15 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/projets')]
 class ProjetController extends AbstractController
 {
+
+    private NotificationSystem $nS;
+
+    public function __construct(NotificationSystem $nS)
+    {
+        $this->nS = $nS;
+    }
+    
+
     #[Route('/', name: 'app_projet_index')]
     public function index(ProjetsRepository $ProjetsRepository, TacheRepository $tacheRepository): Response
     {
@@ -159,7 +169,7 @@ class ProjetController extends AbstractController
     }   
 
     #[Route('/{projetId}/choisir/{userId}', name: 'app_projet_choisir')]
-    public function choisir($projetId, $userId, ProjetsRepository $projetRepository, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    public function choisir($projetId, $userId, ProjetsRepository $projetRepository, UserRepository $userRepository, EntityManagerInterface $em): Response
     {
         $projet = $projetRepository->find($projetId);
         $user = $userRepository->find($userId);
@@ -170,9 +180,14 @@ class ProjetController extends AbstractController
 
         if (!$projet->getMembres()->contains($user)) {
             $projet->addMembre($user);
-            $entityManager->persist($projet);
-            $entityManager->flush();
+            $em->persist($projet);
+            $em->flush();
         }
+
+        // Envoi Notification d'ajout au projet correspondant à l'id 
+        $this->nS->createNotification(
+            $user, "Vous avez été ajouté au projet : " . $projet->getNom()
+        );
 
         $this->addFlash('success', 'L\'utilisateur a été ajouté au projet.');
 
@@ -193,6 +208,11 @@ class ProjetController extends AbstractController
             $projet->removeMembre($user);  
             $entityManager->persist($projet);
             $entityManager->flush();
+
+            $this->nS->createNotification(
+                $user,
+                "Vous avez été retiré du projet : " . $projet->getNom()
+            );
 
             $this->addFlash('success', 'L\'utilisateur a été retiré du projet.');
         } else {

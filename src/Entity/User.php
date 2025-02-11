@@ -55,6 +55,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Tache::class, mappedBy: "users")]
     private Collection $taches;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $token = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $tokenExpiredAt = null;
+    
    /**
      * @var list<string> 
      */
@@ -65,11 +71,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Projets::class, mappedBy: 'Membres')]
     private Collection $projets;
 
+    /**
+     * @var Collection<int, Notification>
+     */
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user')]
+    private Collection $notifications;
+
+   
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
         $this->projets = new ArrayCollection();
         $this->taches = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function __toString()
@@ -277,6 +292,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->addresses->removeElement($address)) {
             if ($address->getUser() === $this) {
                 $address->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): static
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function getTokenExpiredAt(): ?\DateTimeInterface
+    {
+        return $this->tokenExpiredAt;
+    }
+
+    public function setTokenExpiredAt(?\DateTimeInterface $tokenExpiredAt): static
+    {
+        $this->tokenExpiredAt = $tokenExpiredAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
             }
         }
 
