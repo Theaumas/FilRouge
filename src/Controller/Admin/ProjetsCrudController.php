@@ -34,7 +34,7 @@ class ProjetsCrudController extends AbstractCrudController
             TextField::new('Nom'),
             TextEditorField::new('Description'),
             DateField::new('DateLimite'),
-            // TextField::new('statut'),
+            TextField::new('Membres'),
             DateField::new('DateCreation'),
         ];
     }

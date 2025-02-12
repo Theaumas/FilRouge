@@ -2,22 +2,6 @@
 
 {% block title %}Ajouter une nouvelle tâche{% endblock %}
 
-{% block style %}
-    <style>
-        .card {
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .task-actions {
-            display: flex;
-            gap: 5px;
-            justify-content: flex-end;
-        }
-    </style>
-{% endblock %}
-
 {% block body %}
         <div class="container mt-4">
             <a href="{{ path('app_tache_index', {'projet': projet.id}) }}" class="btn btn-outline-dark mb-3">
@@ -30,8 +14,6 @@
     <div class="d-flex justify-content-between mb-4">
         <h1>Ajouter une nouvelle tâche au projet "{{ projet.nom }}"</h1>
     </div>
-
-   
 
     <div class="row">
         <div class="col-md-8 offset-md-2 mb-3">

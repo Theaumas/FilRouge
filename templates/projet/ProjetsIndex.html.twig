@@ -14,7 +14,11 @@
 {% block title %}Liste des projets{% endblock %}
 
 {% block body %}
-<a href="{{ path('app_projet_new') }}" class="btn btn-success mt-4 ms-4">Créer un nouveau projet</a>
+{% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_projet_new') }}" class="btn btn-success mt-4 ms-4">Créer un nouveau projet</a>{% else %}
+    {% if is_granted('ROLE_MANAGER') %}
+    <a href="{{ path('app_projet_new') }}" class="btn btn-success mt-4 ms-4">Créer un nouveau projet</a>
+    {% endif %}
+{% endif %}
 <div class="container mt-4">
     <h1 class="mb-4 text-center">Liste des projets</h1>
     <div class="row">

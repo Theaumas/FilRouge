@@ -81,7 +81,6 @@ class Projets
     public function setDescription(?string $Description): static
     {
         $this->Description = $Description;
-
         return $this;
     }
 

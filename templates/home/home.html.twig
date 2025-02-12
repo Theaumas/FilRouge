@@ -32,7 +32,7 @@
                         <a href="{{ path('app_tache_index', {'projet': projet.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-list-task"></i></a>
                         <p><strong>Membres du projet :</strong></p>
                         {% if projet.Membres is not empty %}
-                            <ul class="list-unstyled">
+                            <ul class="list-unstyled mb-3">
                                 {% for membre in projet.Membres %}
                                     <li>
                                         {{ membre.prenom }} {{ membre.nom }}
@@ -53,6 +53,7 @@
                 </div>
             </div>
             {% else %}
+                <italic> Vous n'avez aucun projet encore </italic>
             {% endfor %}
         <div class="row text-center mt-4 mb-2">
             <div class="col-md-4 ">
